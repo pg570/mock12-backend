@@ -1,6 +1,5 @@
 const express = require("express");
 const Jobs = require("./Jobs.model");
-// const jwt = require("jsonwebtoken");
 
 const app = express.Router();
 
@@ -27,46 +26,13 @@ app.get("/", async (req, res) => {
 //   }
 // });
 
-// app.post("/signUp", async (req, res) => {
-//   let { email } = req.body;
-//   try {
-//     let user = await Users.findOne({ email });
-//     if (user) {
-//       return res.status(404).send("User is Already Exists!");
-//     } else {
-//       await Users.create(req.body);
-//       return res.send("Registration Successful!");
-//     }
-//   } catch (e) {
-//     res.status(500).send(e.message);
-//   }
-// });
+app.post("/", async (req, res) => {
+  try {
+    let job = await Jobs.create(req.body);
+    res.send(job);
+  } catch (e) {
+    res.status(500).send(e.message);
+  }
+});
 
-// app.post("/login", async (req, res) => {
-//   const { email, password } = req.body;
-//   const user = await Users.findOne({ email, password });
-//   if (!user) {
-//     return res.send("Invalid Credentials");
-//   }
-//   let userId = user._id
-//   let userEmail = user.email
-//   let userName = user.firstName+" "+user.lastName
-//   const token = jwt.sign(
-//     { id: userId, email: userEmail, age: user.age },
-//     "SECRET12345",
-//     {
-//       expiresIn: "30 day",
-//     }
-//   );
-//   res.send({ message: "Login Success!", userId,userName, userEmail, token });
-// });
-
-// app.post("/logout", (req, res) => {
-//   try {
-//     res.clearCookie("token");
-//     res.send("logout successfully");
-//   } catch (e) {
-//     res.status(500).send(e);
-//   }
-// });
 module.exports = app;
