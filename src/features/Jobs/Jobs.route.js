@@ -4,7 +4,21 @@ const Jobs = require("./Jobs.model");
 const app = express.Router();
 
 app.get("/", async (req, res) => {
-  let jobs = await Jobs.find();
+  const search = req.query.search || "";
+  let sort = req.query.sort || "postedAt";
+
+  req.query.sort ? (sort = req.query.sort.split(",")) : (sort = [sort]);
+
+  let sortBy = {};
+  if (sort[1]) {
+    sortBy[sort[0]] = sort[1];
+  } else {
+    sortBy[sort[0]] = "desc";
+  }
+  let jobs = await Jobs.find({
+    language: { $regex: search, $options: "i" },
+  }).sort(sortBy);
+
   res.send(jobs);
 });
 
